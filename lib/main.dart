@@ -2,6 +2,7 @@ import 'package:algolia/algolia.dart';
 import 'package:flutter/material.dart';
 
 // Initiate static Algolia once in your project.
+// Be sure to replace the 'applicationId' and 'apiKey' with your own.
 class Application {
   static const Algolia algolia = Algolia.init(
     applicationId: 'latency',
@@ -40,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // Initiate Algolia in your project
   Algolia algolia = Application.algolia;
 
-  final String _indexName = 'bestbuy';
+  final String _indexName = 'bestbuy'; // Set your index name you want to search
   String _searchText = "";
   int _searchPage = 0;
   List<SearchHit> _hitsList = [];
@@ -154,7 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _searchFieldController.addListener(() {
       if (_searchText != _searchFieldController.text) {
         setState(() {
-          _searchPage = 0;
+          _searchPage = 0; // Reset page to 0, it's a new search
           _searchText = _searchFieldController.text;
         });
         _getSearchResult(_searchText);
@@ -165,7 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         setState(() {
-          _searchPage++;
+          _searchPage++; // Increment page to load the next results
         });
         _getSearchResult(_searchText, append: true);
       }

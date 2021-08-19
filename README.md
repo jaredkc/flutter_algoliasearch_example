@@ -1,16 +1,8 @@
-# flutter_algoliasearch
+# Flutter Algolia Search Example
 
-A new Flutter project.
+This is a simple Algolia search example in Flutter. It closely aligns with
+[Algolia's example](https://www.algolia.com/doc/guides/building-search-ui/getting-started/how-to/flutter/ios/),
+with less configuration needed thanks to the unofficial [Algolia Search package](https://pub.dev/packages/algolia).
+Infinite scroll was also added to load more results when available.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Algolia's example `applicationId`, `apiKey` and `index` included. Be sure to replace these with your own.
