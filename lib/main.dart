@@ -16,7 +16,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-  // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -44,6 +44,8 @@ class _MyHomePageState extends State<MyHomePage> {
   final String _indexName = 'bestbuy'; // Set your index name you want to search
   String _searchText = "";
   int _searchPage = 0;
+  bool _algoliaInitLoading = true;
+  bool _algoliaLoadingMore = false;
   List<SearchHit> _hitsList = [];
 
   final ScrollController _scrollController = ScrollController();
@@ -57,6 +59,9 @@ class _MyHomePageState extends State<MyHomePage> {
         .query(query);
 
     AlgoliaQuerySnapshot snap = await response.getObjects();
+
+    _algoliaInitLoading = false;
+    _algoliaLoadingMore = false;
 
     if (!snap.hasHits) {
       debugPrint('No more results');
@@ -75,8 +80,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Algolia Search Example'),
+      appBar: AppBar(
+        title: const Text('Algolia Search Example'),
       ),
       body: Column(
         children: <Widget>[
@@ -106,6 +111,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       : null),
             ),
           ),
+          if (_algoliaInitLoading)
+            const Expanded(child: Center(child: CircularProgressIndicator())),
           Expanded(
             child: _hitsList.isEmpty
                 ? const Center(child: Text('No results'))
@@ -122,27 +129,32 @@ class _MyHomePageState extends State<MyHomePage> {
                             bottom: BorderSide(color: Colors.grey.shade300),
                           ),
                         ),
-                            child: Row(
+                        child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                              SizedBox(
+                            SizedBox(
                               width: 50,
                               child: Image.network(_hitsList[index].image),
                             ),
-                              const SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             Expanded(
                               child: Text(
                                 _hitsList[index].name,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              )
-                            ],
+                            )
+                          ],
                         ),
-                        );
+                      );
                     },
                   ),
-          )
+          ),
+          if (_algoliaLoadingMore)
+            const Padding(
+              padding: EdgeInsets.all(8),
+              child: CircularProgressIndicator(),
+            ),
         ],
       ),
     );
@@ -166,6 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         setState(() {
+          _algoliaLoadingMore = true; // Show loading indicator
           _searchPage++; // Increment page to load the next results
         });
         _getSearchResult(_searchText, append: true);
